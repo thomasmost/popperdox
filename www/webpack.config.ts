@@ -2,9 +2,8 @@ import path from 'path';
 import webpack from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
-
 const config: webpack.Configuration = {
-  entry: "./bootstrap.js",
+  entry: "./index.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bootstrap.js",
@@ -12,13 +11,17 @@ const config: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: /\.wasm$/,
-        type: 'webassembly/sync',
-      }
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
     ]
   },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
   experiments: {
-    syncWebAssembly: true
+    asyncWebAssembly: true
   },
   mode: "development",
   plugins: [
