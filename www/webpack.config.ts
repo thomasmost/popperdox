@@ -1,7 +1,7 @@
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const path = require('path');
+import path from 'path';
+import webpack from 'webpack';
 
-module.exports = {
+const config: webpack.Configuration = {
   entry: "./bootstrap.js",
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -19,7 +19,9 @@ module.exports = {
     syncWebAssembly: true
   },
   mode: "development",
-  plugins: [
-    new CopyWebpackPlugin(['index.html'])
-  ],
+  // plugins: [
+  //   new CopyWebpackPlugin(['index.html'])
+  // ],
 };
+
+export default config;
