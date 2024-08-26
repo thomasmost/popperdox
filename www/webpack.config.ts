@@ -1,5 +1,7 @@
 import path from 'path';
 import webpack from 'webpack';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+
 
 const config: webpack.Configuration = {
   entry: "./bootstrap.js",
@@ -19,9 +21,13 @@ const config: webpack.Configuration = {
     syncWebAssembly: true
   },
   mode: "development",
-  // plugins: [
-  //   new CopyWebpackPlugin(['index.html'])
-  // ],
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "index.html", to: "index.html" },
+      ],
+    })
+  ],
 };
 
 export default config;
