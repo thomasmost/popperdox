@@ -65,6 +65,36 @@ impl Universe {
         (row * self.width + column) as usize
     }
 
+    fn evaluate_intolerance_and_swap(&self, row: u32, column: u32) -> (u8, (u32, u32)) {
+        let mut best_neighboring_intolerance = std::u8::MAX;
+        let mut best_swap = (row,column);
+        let mut count = 0;
+        for delta_row in [self.height - 1, 0, 1].iter().cloned() {
+            for delta_col in [self.width - 1, 0, 1].iter().cloned() {
+                if delta_row == 0 && delta_col == 0 {
+                    continue;
+                }
+
+                let neighbor_row = (row + delta_row) % self.height;
+                let neighbor_col = (column + delta_col) % self.width;
+                let idx = self.get_index(neighbor_row, neighbor_col);
+                if self.cells[idx].intolerance_x > 0 {
+                    let opposing_row_delta = if delta_row == 0 { 0 } else if delta_row == self.height - 1 { 1 } else { self.height - 1 };
+                    let opposing_col_delta = if delta_col == 0 { 0 } else if delta_col == self.width - 1 { 1 } else { self.width - 1 }; 
+                    let opposing_neighbor_row = (row + opposing_row_delta) % self.height;
+                    let opposing_neighbor_col = (column + opposing_col_delta) % self.width;
+                    let opposing_neighbor_neighboring_intolerance = self.total_neighboring_intolerance(opposing_neighbor_row, opposing_neighbor_col);
+                    if opposing_neighbor_neighboring_intolerance < best_neighboring_intolerance {
+                        best_neighboring_intolerance = opposing_neighbor_neighboring_intolerance;
+                        best_swap = (opposing_neighbor_row, opposing_neighbor_col);
+                    }
+                }
+                count += self.cells[idx].intolerance_x;
+            }
+        }
+        (count, best_swap)
+    }
+
     fn total_neighboring_intolerance(&self, row: u32, column: u32) -> u8 {
         let mut count = 0;
         for delta_row in [self.height - 1, 0, 1].iter().cloned() {
@@ -102,12 +132,21 @@ impl Universe {
     pub fn tick(&mut self) {
         let mut next = self.cells.clone();
 
+        // (row, col), (row, col)
+        let mut swaps = Vec::<((u32, u32), (u32, u32))>::new();
+
         for row in 0..self.height {
             for col in 0..self.width {
                 let idx = self.get_index(row, col);
                 let cell = self.cells[idx];
                 let neighboring_tolerance = self.total_neighboring_tolerance(row, col);
-                let neighboring_intolerance = self.total_neighboring_intolerance(row, col);
+                let (neighboring_intolerance, best_swap) = self.evaluate_intolerance_and_swap(row, col);
+
+                
+
+                if &cell.identity == &Identity::X && neighboring_intolerance > 0 && (best_swap.0 != row || best_swap.1 != col) {
+                    swaps.push(((row, col), best_swap));
+                }
 
                 let next_cell = match (&cell.identity, neighboring_tolerance, neighboring_intolerance) {
                     // Rule 1: Any X cell will not be affected by tolerance or intolerance
@@ -134,6 +173,16 @@ impl Universe {
 
                 next[idx] = next_cell;
             }
+        }
+
+        for swap in swaps {
+            let (a, b) = swap;
+            let idx_a = self.get_index(a.0, a.1);
+            let idx_b = self.get_index(b.0, b.1);
+            let idx_a_cell = next[idx_a];
+            let idx_b_cell = next[idx_b];
+            next[idx_a] = idx_b_cell;
+            next[idx_b] = idx_a_cell;
         }
 
         self.cells = next;
@@ -167,7 +216,7 @@ impl Universe {
                         tolerance_x: 1 
                     }
                 }
-                else if i % 13 == 0 || i % 17 == 0 {
+                else if i % 17 == 0 {
                     Cell {
                         identity: Identity::A,
                         intolerance_x: 1,
