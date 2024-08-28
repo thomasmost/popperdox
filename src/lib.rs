@@ -36,8 +36,8 @@ pub struct Universe {
     width: u32,
     height: u32,
     seeded_randomizer: Random,
-    i_virulence: u8,
-    t_virulence: u8,
+    i_virality: u8,
+    t_virality: u8,
     cells: Vec<Cell>,
 }
 
@@ -112,15 +112,15 @@ impl Universe {
                 let next_cell = match (&cell.identity, neighboring_tolerance, neighboring_intolerance) {
                     // Rule 1: Any X cell will not be affected by tolerance or intolerance
                     (Identity::X, _tol, _int) => cell.clone(),
-                    // Rule 2: Any A cell gets adjusted by tVirulence and iVirulence
+                    // Rule 2: Any A cell gets adjusted by tvirality and ivirality
                     (Identity::A, tol, int) => {
                         let mut new_tolerance = cell.tolerance_x;
                         let mut new_intolerance = cell.intolerance_x;
-                          if (self.seeded_randomizer.u32() % 255) < (self.t_virulence as u32) * (tol as u32) {
+                          if (self.seeded_randomizer.u32() % 255) < (self.t_virality as u32) * (tol as u32) {
                             new_tolerance = new_tolerance.checked_add(1).unwrap_or(255);
                             new_intolerance = new_intolerance.checked_sub(1).unwrap_or(0);
                           }
-                          if (self.seeded_randomizer.u32() % 255) < (self.i_virulence as u32) * (int as u32) {
+                          if (self.seeded_randomizer.u32() % 255) < (self.i_virality as u32) * (int as u32) {
                             new_intolerance = new_intolerance.checked_add(1).unwrap_or(255);
                             new_tolerance = new_tolerance.checked_sub(1).unwrap_or(0);
                           }
@@ -190,8 +190,8 @@ impl Universe {
 
         Universe {
             seeded_randomizer: Random::from_seed(seed1),
-            i_virulence: 2,
-            t_virulence: 1,
+            i_virality: 2,
+            t_virality: 1,
             width,
             height,
             cells,
