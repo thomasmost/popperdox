@@ -5,9 +5,9 @@
     "main": "index.js",
     "engines": {
       "node": ">=8.0.0",
-      "pnpm": "9.6.0"
+      "pnpm": "9.9.0"
     },
-    "packageManager": "pnpm@9.6.0",
+    "packageManager": "pnpm@9.9.0",
     "bin": {
       "create-wasm-app": ".bin/create-wasm-app.js"
     },
