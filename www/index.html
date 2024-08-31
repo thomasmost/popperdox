@@ -15,10 +15,19 @@
         align-items: center;
         justify-content: center;
       }
+      .controls {
+        display: flex;
+        align-items: center;
+      }
     </style>
   </head>
   <body>
+    <div className="controls">
+    <button id="play-pause"></button>
+    <button id="reset-btn">Reset</button></div>
+    <hr />
     <canvas id="popperdox-canvas"></canvas>
+    <div id="animation-id"></div>
     <script src="./bootstrap.js"></script>
   </body>
 </html>

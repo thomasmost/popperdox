@@ -12,7 +12,42 @@ export async function main() {
  const universe = Universe.new();
  const width = universe.width();
  const height = universe.height();
- 
+
+ // for playing/pausing
+  let animationId: number | null = null;
+  const isPaused = () => {
+    return animationId === null;
+  };
+  const playPauseButton = document.getElementById("play-pause");
+  const resetButton = document.getElementById("reset-btn");
+  const animationIdDiv = document.getElementById("animation-id");
+  const play = () => {
+    playPauseButton.textContent = "⏸";
+    renderLoop();
+  };
+  
+  const pause = () => {
+    playPauseButton.textContent = "▶";
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  };
+  
+  playPauseButton.addEventListener("click", event => {
+    if (isPaused()) {
+      play();
+    } else {
+      pause();
+    }
+  });
+  resetButton.addEventListener("click", event => {
+    universe.reset();
+    if (isPaused()) {
+    play();
+    pause();
+    }
+  });
+
+
  // Give the canvas room for all of our cells and a 1px border
  // around each of them.
  const canvas = document.getElementById("popperdox-canvas") as HTMLCanvasElement;
@@ -33,7 +68,6 @@ export async function main() {
    const rendered = universe.render();
  
    ctx.beginPath();
- 
  
    const cellStrings = rendered.split(";");
    const cells = cellStrings.map(cellString => {
@@ -89,20 +123,20 @@ export async function main() {
  };
  
  const renderLoop = () => {
-   debugger;
+  //  debugger;
    universe.tick();
  
    drawGrid();
    drawCells();
  
-   setTimeout(() => {
-     requestAnimationFrame(renderLoop);
-   }, 200)
+  //  setTimeout(() => {
+    animationId = requestAnimationFrame(renderLoop);
+    animationIdDiv.innerText = "Generation: " + animationId.toString();
+  //  }, 200)
  };
  
  drawGrid();
  drawCells();
- 
- requestAnimationFrame(renderLoop);
-   
+
+ play();
 }

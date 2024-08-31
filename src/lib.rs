@@ -255,12 +255,17 @@ impl Universe {
         self.height
     }
 
-    pub fn cells(&self) -> *const Cell {
-        self.cells.as_ptr()
+    pub fn cells(self) -> Vec<Cell> {
+        self.cells
     }
 
     pub fn render(&self) -> String {
         self.to_string()
+    }
+    pub fn reset(&mut self) -> () {
+        log!("Reset requested");
+        let new_universe = Universe::new();
+        self.cells = new_universe.cells();
     }
 
 
