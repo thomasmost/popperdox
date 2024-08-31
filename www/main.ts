@@ -1,4 +1,4 @@
-import wasmPopperdox from "wasm-popperdox";
+import wasmPopperdox from "popperdox";
 import { generateIntolerantColor, generateTolerantColor } from "./colorizer";
 
 const CELL_SIZE = 5; // px
@@ -55,10 +55,6 @@ export async function main() {
  canvas.width = (CELL_SIZE + 1) * width + 1;
  
  const ctx = canvas.getContext('2d');
- // Import the WebAssembly memory at the top of the file.
- // import { memory } from "wasm-popperdox/wasm_popperdox_bg";
- 
- // ...
  
  const getIndex = (row: number, column: number) => {
    return row * width + column;

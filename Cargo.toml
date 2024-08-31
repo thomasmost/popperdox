@@ -1,6 +1,9 @@
 [package]
-name = "wasm-popperdox"
+name = "popperdox"
 version = "0.1.0"
+description = "A WASM implementation of the Popperdox simulation"
+repository = "https://github.com/thomasmost/popperdox"
+license = "Apache 2.0"
 authors = ["Thomas Constantine Moore <tomismore@gmail.com>"]
 edition = "2018"
 
@@ -31,3 +34,4 @@ wasm-bindgen-test = "0.3.34"
 [profile.release]
 # Tell `rustc` to optimize for small code size.
 opt-level = "s"
+lto = true

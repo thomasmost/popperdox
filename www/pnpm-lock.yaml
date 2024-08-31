@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      wasm-popperdox:
+      popperdox:
         specifier: file:../pkg
         version: file:../pkg
     devDependencies:
@@ -1083,6 +1083,9 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
+  popperdox@file:../pkg:
+    resolution: {directory: ../pkg, type: directory}
+
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
 
@@ -1434,9 +1437,6 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
-
-  wasm-popperdox@file:../pkg:
-    resolution: {directory: ../pkg, type: directory}
 
   watchpack@2.4.2:
     resolution: {integrity: sha512-TnbFSbcOCcDgjZ4piURLCbJ3nJhznVh9kw6F6iokjiFPl8ONxe9A6nMDVXDiNbrSfLILs6vB07F7wLBrwPYzJw==}
@@ -2574,6 +2574,8 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
+  popperdox@file:../pkg: {}
+
   process-nextick-args@2.0.1: {}
 
   proxy-addr@2.0.7:
@@ -2941,8 +2943,6 @@ snapshots:
   v8-compile-cache-lib@3.0.1: {}
 
   vary@1.1.2: {}
-
-  wasm-popperdox@file:../pkg: {}
 
   watchpack@2.4.2:
     dependencies:
