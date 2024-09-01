@@ -28,6 +28,7 @@ const config: webpack.Configuration = {
     new CopyWebpackPlugin({
       patterns: [
         { from: "index.html", to: "index.html" },
+        { from: "public", to: "public"}
       ],
     })
   ],
