@@ -8,11 +8,8 @@
     "pnpm": ">=9"
   },
   "packageManager": "pnpm@9.9.0",
-  "bin": {
-    "create-wasm-app": ".bin/create-wasm-app.js"
-  },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "webpack --config webpack.config.ts",
     "dev": "webpack-dev-server"
   },
   "repository": {
