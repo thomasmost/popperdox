@@ -4,8 +4,8 @@
   "description": "Create an app using the npm package",
   "main": "index.js",
   "engines": {
-    "node": ">=8.0.0",
-    "pnpm": "9.9.0"
+    "node": ">=16",
+    "pnpm": ">=9"
   },
   "packageManager": "pnpm@9.9.0",
   "bin": {
