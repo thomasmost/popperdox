@@ -14,6 +14,11 @@ macro_rules! log {
     }
 }
 
+enum IntoleranceOf {
+    X,
+    IntoleranceX,
+}
+
 #[wasm_bindgen]
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -28,6 +33,15 @@ pub struct Cell {
     identity: Identity,
     intolerance_x: u8,
     tolerance_x: u8,
+}
+
+impl Cell {
+    pub fn get_intolerance(&self, intolerance: &IntoleranceOf) -> u8 {
+        match intolerance {
+            IntoleranceOf::X => self.intolerance_x,
+            IntoleranceOf::IntoleranceX => self.tolerance_x,
+        }
+    }
 }
 
 #[wasm_bindgen]
@@ -90,7 +104,12 @@ impl Universe {
         (row * self.width + column) as usize
     }
 
-    fn evaluate_intolerance_and_swap(&self, row: u32, column: u32) -> (u8, (u32, u32)) {
+    fn evaluate_intolerance_and_swap(
+        &self,
+        row: u32,
+        column: u32,
+        intolerance: IntoleranceOf,
+    ) -> (u8, (u32, u32)) {
         let mut best_neighboring_intolerance = std::u8::MAX;
         let mut best_swap = (row, column);
         let mut count = 0;
@@ -103,7 +122,7 @@ impl Universe {
                 let neighbor_row = (row + delta_row) % self.height;
                 let neighbor_col = (column + delta_col) % self.width;
                 let idx = self.get_index(neighbor_row, neighbor_col);
-                if self.cells[idx].intolerance_x > 0 {
+                if self.cells[idx].get_intolerance(&intolerance) > 0 {
                     let opposing_row_delta = if delta_row == 0 {
                         0
                     } else if delta_row == self.height - 1 {
@@ -124,30 +143,35 @@ impl Universe {
                         .total_neighboring_intolerance(
                             opposing_neighbor_row,
                             opposing_neighbor_col,
+                            &intolerance,
                         );
                     if opposing_neighbor_neighboring_intolerance < best_neighboring_intolerance {
                         best_neighboring_intolerance = opposing_neighbor_neighboring_intolerance;
                         best_swap = (opposing_neighbor_row, opposing_neighbor_col);
                     }
                 }
-                count += self.cells[idx].intolerance_x;
+                count += self.cells[idx].get_intolerance(&intolerance);
             }
         }
         (count, best_swap)
     }
 
-    fn total_neighboring_intolerance(&self, row: u32, column: u32) -> u8 {
+    fn total_neighboring_intolerance(
+        &self,
+        row: u32,
+        column: u32,
+        intolerance: &IntoleranceOf,
+    ) -> u8 {
         let mut count = 0;
         for delta_row in [self.height - 1, 0, 1].iter().cloned() {
             for delta_col in [self.width - 1, 0, 1].iter().cloned() {
                 if delta_row == 0 && delta_col == 0 {
                     continue;
                 }
-
                 let neighbor_row = (row + delta_row) % self.height;
                 let neighbor_col = (column + delta_col) % self.width;
                 let idx = self.get_index(neighbor_row, neighbor_col);
-                count += self.cells[idx].intolerance_x;
+                count += self.cells[idx].get_intolerance(intolerance)
             }
         }
         count
@@ -182,13 +206,25 @@ impl Universe {
                 let cell = self.cells[idx];
                 let neighboring_tolerance = self.total_neighboring_tolerance(row, col);
                 let (neighboring_intolerance, best_swap) =
-                    self.evaluate_intolerance_and_swap(row, col);
+                    self.evaluate_intolerance_and_swap(row, col, IntoleranceOf::X);
+                let (neighboring_intolerance_of_intolerance, best_swap_for_intolerant_cell) =
+                    self.evaluate_intolerance_and_swap(row, col, IntoleranceOf::IntoleranceX);
 
                 if &cell.identity == &Identity::X
                     && neighboring_intolerance > 0
                     && (best_swap.0 != row || best_swap.1 != col)
                 {
                     swaps.push(((row, col), best_swap));
+                }
+                if self.config.enable_intolerance_of_intolerance {
+                    if &cell.identity == &Identity::A
+                        && cell.intolerance_x > 0
+                        && neighboring_intolerance_of_intolerance > 0
+                        && (best_swap_for_intolerant_cell.0 != row
+                            || best_swap_for_intolerant_cell.1 != col)
+                    {
+                        swaps.push(((row, col), best_swap_for_intolerant_cell));
+                    }
                 }
 
                 let next_cell = match (
@@ -291,7 +327,11 @@ impl Universe {
             config,
             seeded_randomizer: Random::from_seed(seed1),
             i_virality: 2,
-            t_virality: 1,
+            t_virality: if config.enable_intolerance_of_intolerance {
+                2
+            } else {
+                1
+            },
             width,
             height,
             cells,
