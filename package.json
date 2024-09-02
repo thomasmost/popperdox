@@ -8,13 +8,15 @@
     "pnpm": "9.9.0"
   },
   "packageManager": "pnpm@9.9.0",
+  "author": "Thomas Moore <thomas@versa.org>",
   "bin": {
     "popperdox": ".bin/popperdox.js"
   },
   "scripts": {
     "build": "wasm-pack build",
     "dev": "pnpm --dir www run dev",
-    "redev": "wasm-pack build && pnpm --dir www install && pnpm --dir www run dev"
+    "redev": "wasm-pack build && pnpm --dir www install && pnpm --dir www run dev",
+    "prepare": "husky"
   },
   "keywords": [
     "webassembly",
@@ -22,8 +24,12 @@
     "rust",
     "webpack"
   ],
-  "author": "Thomas Moore <thomas@versa.org>",
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
   "devDependencies": {
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.10",
     "prettier": "3.3.3"
   }
 }
