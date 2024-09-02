@@ -1,7 +1,7 @@
 mod utils;
 
 use wasm_bindgen::prelude::*;
-use web_sys::console::log;
+// use web_sys::console::log;
 
 use seeded_random::{Random,Seed};
 
@@ -32,7 +32,33 @@ pub struct Cell {
 }
 
 #[wasm_bindgen]
+#[derive(Clone, Copy, Debug)]
+pub struct UniverseConfig {
+    enable_swapping: bool,
+    enable_intolerance_of_intolerance: bool,
+}
+
+#[wasm_bindgen]
+impl UniverseConfig {
+pub fn new() -> Self {
+    UniverseConfig {
+        enable_swapping: false,
+        enable_intolerance_of_intolerance: false
+    }
+}
+pub fn with_swapping(&mut self) -> Self {
+    self.enable_swapping = true;
+    *self
+}
+pub fn with_intolerance_of_intolerance(&mut self) -> Self {
+    self.enable_intolerance_of_intolerance = true;
+    *self
+}
+}
+
+#[wasm_bindgen]
 pub struct Universe {
+    config: UniverseConfig,
     width: u32,
     height: u32,
     seeded_randomizer: Random,
@@ -175,20 +201,22 @@ impl Universe {
             }
         }
 
-        for swap in swaps {
-            let (a, b) = swap;
-            let idx_a = self.get_index(a.0, a.1);
-            let idx_b = self.get_index(b.0, b.1);
-            let idx_a_cell = next[idx_a];
-            let idx_b_cell = next[idx_b];
-            next[idx_a] = idx_b_cell;
-            next[idx_b] = idx_a_cell;
+        if self.config.enable_swapping {
+            for swap in swaps {
+                let (a, b) = swap;
+                let idx_a = self.get_index(a.0, a.1);
+                let idx_b = self.get_index(b.0, b.1);
+                let idx_a_cell = next[idx_a];
+                let idx_b_cell = next[idx_b];
+                next[idx_a] = idx_b_cell;
+                next[idx_b] = idx_a_cell;
+            }
         }
 
         self.cells = next;
     }
 
-    pub fn new() -> Universe {
+    pub fn new(config: UniverseConfig) -> Universe {
         let width = 64;
         let height = 64;
 
@@ -238,6 +266,7 @@ impl Universe {
         let seed1 = Seed::unsafe_new(seed);
 
         Universe {
+            config,
             seeded_randomizer: Random::from_seed(seed1),
             i_virality: 2,
             t_virality: 1,
@@ -264,7 +293,7 @@ impl Universe {
     }
     pub fn reset(&mut self) -> () {
         log!("Reset requested");
-        let new_universe = Universe::new();
+        let new_universe = Universe::new(self.config.clone());
         self.cells = new_universe.cells();
     }
 

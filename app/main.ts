@@ -9,7 +9,12 @@ const A_COLOR = "#aabbcc";
 export async function main() {
  const {Universe, Identity} = (await (wasmPopperdox as any)) as typeof wasmPopperdox;
  // Construct the universe, and get its width and height.
- const universe = Universe.new();
+ let config = {
+  free: function(): void { null },
+  enable_swapping: true,
+  enable_intolerance_of_intolerance: true,
+ }
+ const universe = Universe.new(config);
  const width = universe.width();
  const height = universe.height();
 
