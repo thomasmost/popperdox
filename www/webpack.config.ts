@@ -1,6 +1,6 @@
-import path from 'path';
-import webpack from 'webpack';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import path from "path";
+import webpack from "webpack";
+import CopyWebpackPlugin from "copy-webpack-plugin";
 
 const config: webpack.Configuration = {
   entry: "./index.ts",
@@ -12,24 +12,22 @@ const config: webpack.Configuration = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
-    ]
+    ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: [".tsx", ".ts", ".js"],
   },
   experiments: {
-    asyncWebAssembly: true
+    asyncWebAssembly: true,
   },
   mode: "development",
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [
-        { from: "index.html", to: "index.html" },
-      ],
-    })
+      patterns: [{ from: "index.html", to: "index.html" }],
+    }),
   ],
 };
 
