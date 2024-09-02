@@ -17,26 +17,48 @@ export async function main() {
 
   // for playing/pausing
   let animationId: number | null = null;
+  let timeoutId: NodeJS.Timeout | null = null;
   const isPaused = () => {
     return animationId === null;
   };
   const playPauseButton = document.getElementById("play-pause");
+  const fastForwardButton = document.getElementById("ffwd-btn");
   const resetButton = document.getElementById("reset-btn");
+  const stepForwardButton = document.getElementById("step-fwd-btn");
   const animationIdDiv = document.getElementById("animation-id");
-  const play = () => {
+  const play = (throttled: boolean) => {
     playPauseButton.textContent = "⏸";
-    renderLoop();
+    stepForwardButton.setAttribute("disabled", "true");
+    renderLoop(throttled);
   };
 
   const pause = () => {
     playPauseButton.textContent = "▶";
+    stepForwardButton.removeAttribute("disabled");
     cancelAnimationFrame(animationId);
+    clearTimeout(timeoutId);
     animationId = null;
+    timeoutId = null;
   };
+
+  fastForwardButton.addEventListener("click", (event) => {
+    if (timeoutId) {
+      pause();
+      play(false);
+    } else {
+      pause();
+      play(true);
+    }
+  });
+
+  stepForwardButton.addEventListener("click", (event) => {
+    play(false);
+    pause();
+  });
 
   playPauseButton.addEventListener("click", (event) => {
     if (isPaused()) {
-      play();
+      play(true);
     } else {
       pause();
     }
@@ -44,7 +66,7 @@ export async function main() {
   resetButton.addEventListener("click", (event) => {
     universe.reset();
     if (isPaused()) {
-      play();
+      play(false);
       pause();
     }
   });
@@ -121,21 +143,26 @@ export async function main() {
     ctx.stroke();
   };
 
-  const renderLoop = () => {
+  const renderLoop = (throttled: boolean) => {
     //  debugger;
     universe.tick();
 
     drawGrid();
     drawCells();
 
-    //  setTimeout(() => {
-    animationId = requestAnimationFrame(renderLoop);
-    animationIdDiv.innerText = "Generation: " + animationId.toString();
-    //  }, 200)
+    if (throttled) {
+      timeoutId = setTimeout(() => {
+        animationId = requestAnimationFrame(() => renderLoop(throttled));
+        animationIdDiv.innerText = "Generation: " + animationId.toString();
+      }, 200);
+    } else {
+      animationId = requestAnimationFrame(() => renderLoop(throttled));
+      animationIdDiv.innerText = "Generation: " + animationId.toString();
+    }
   };
 
   drawGrid();
   drawCells();
 
-  play();
+  play(true);
 }
