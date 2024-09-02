@@ -25,7 +25,8 @@
     "webpack"
   ],
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": "prettier --write --ignore-unknown",
+    "**/*.rs": "cargo fmt --"
   },
   "devDependencies": {
     "husky": "^9.1.5",

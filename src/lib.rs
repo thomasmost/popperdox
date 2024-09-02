@@ -3,7 +3,7 @@ mod utils;
 use wasm_bindgen::prelude::*;
 // use web_sys::console::log;
 
-use seeded_random::{Random,Seed};
+use seeded_random::{Random, Seed};
 
 extern crate web_sys;
 
@@ -19,16 +19,15 @@ macro_rules! log {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Identity {
     A,
-    X
+    X,
 }
-
 
 #[wasm_bindgen]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Cell {
     identity: Identity,
     intolerance_x: u8,
-    tolerance_x: u8
+    tolerance_x: u8,
 }
 
 #[wasm_bindgen]
@@ -40,20 +39,20 @@ pub struct UniverseConfig {
 
 #[wasm_bindgen]
 impl UniverseConfig {
-pub fn new() -> Self {
-    UniverseConfig {
-        enable_swapping: false,
-        enable_intolerance_of_intolerance: false
+    pub fn new() -> Self {
+        UniverseConfig {
+            enable_swapping: false,
+            enable_intolerance_of_intolerance: false,
+        }
     }
-}
-pub fn with_swapping(&mut self) -> Self {
-    self.enable_swapping = true;
-    *self
-}
-pub fn with_intolerance_of_intolerance(&mut self) -> Self {
-    self.enable_intolerance_of_intolerance = true;
-    *self
-}
+    pub fn with_swapping(&mut self) -> Self {
+        self.enable_swapping = true;
+        *self
+    }
+    pub fn with_intolerance_of_intolerance(&mut self) -> Self {
+        self.enable_intolerance_of_intolerance = true;
+        *self
+    }
 }
 
 #[wasm_bindgen]
@@ -75,7 +74,7 @@ impl fmt::Display for Universe {
             for &cell in line {
                 let ident = match cell.identity {
                     Identity::A => 'A',
-                    Identity::X => 'X'
+                    Identity::X => 'X',
                 };
                 write!(f, "{},{},{};", ident, cell.intolerance_x, cell.tolerance_x)?;
             }
@@ -93,7 +92,7 @@ impl Universe {
 
     fn evaluate_intolerance_and_swap(&self, row: u32, column: u32) -> (u8, (u32, u32)) {
         let mut best_neighboring_intolerance = std::u8::MAX;
-        let mut best_swap = (row,column);
+        let mut best_swap = (row, column);
         let mut count = 0;
         for delta_row in [self.height - 1, 0, 1].iter().cloned() {
             for delta_col in [self.width - 1, 0, 1].iter().cloned() {
@@ -105,11 +104,27 @@ impl Universe {
                 let neighbor_col = (column + delta_col) % self.width;
                 let idx = self.get_index(neighbor_row, neighbor_col);
                 if self.cells[idx].intolerance_x > 0 {
-                    let opposing_row_delta = if delta_row == 0 { 0 } else if delta_row == self.height - 1 { 1 } else { self.height - 1 };
-                    let opposing_col_delta = if delta_col == 0 { 0 } else if delta_col == self.width - 1 { 1 } else { self.width - 1 }; 
+                    let opposing_row_delta = if delta_row == 0 {
+                        0
+                    } else if delta_row == self.height - 1 {
+                        1
+                    } else {
+                        self.height - 1
+                    };
+                    let opposing_col_delta = if delta_col == 0 {
+                        0
+                    } else if delta_col == self.width - 1 {
+                        1
+                    } else {
+                        self.width - 1
+                    };
                     let opposing_neighbor_row = (row + opposing_row_delta) % self.height;
                     let opposing_neighbor_col = (column + opposing_col_delta) % self.width;
-                    let opposing_neighbor_neighboring_intolerance = self.total_neighboring_intolerance(opposing_neighbor_row, opposing_neighbor_col);
+                    let opposing_neighbor_neighboring_intolerance = self
+                        .total_neighboring_intolerance(
+                            opposing_neighbor_row,
+                            opposing_neighbor_col,
+                        );
                     if opposing_neighbor_neighboring_intolerance < best_neighboring_intolerance {
                         best_neighboring_intolerance = opposing_neighbor_neighboring_intolerance;
                         best_swap = (opposing_neighbor_row, opposing_neighbor_col);
@@ -166,33 +181,43 @@ impl Universe {
                 let idx = self.get_index(row, col);
                 let cell = self.cells[idx];
                 let neighboring_tolerance = self.total_neighboring_tolerance(row, col);
-                let (neighboring_intolerance, best_swap) = self.evaluate_intolerance_and_swap(row, col);
+                let (neighboring_intolerance, best_swap) =
+                    self.evaluate_intolerance_and_swap(row, col);
 
-                
-
-                if &cell.identity == &Identity::X && neighboring_intolerance > 0 && (best_swap.0 != row || best_swap.1 != col) {
+                if &cell.identity == &Identity::X
+                    && neighboring_intolerance > 0
+                    && (best_swap.0 != row || best_swap.1 != col)
+                {
                     swaps.push(((row, col), best_swap));
                 }
 
-                let next_cell = match (&cell.identity, neighboring_tolerance, neighboring_intolerance) {
+                let next_cell = match (
+                    &cell.identity,
+                    neighboring_tolerance,
+                    neighboring_intolerance,
+                ) {
                     // Rule 1: Any X cell will not be affected by tolerance or intolerance
                     (Identity::X, _tol, _int) => cell.clone(),
                     // Rule 2: Any A cell gets adjusted by tvirality and ivirality
                     (Identity::A, tol, int) => {
                         let mut new_tolerance = cell.tolerance_x;
                         let mut new_intolerance = cell.intolerance_x;
-                          if (self.seeded_randomizer.u32() % 255) < (self.t_virality as u32) * (tol as u32) {
+                        if (self.seeded_randomizer.u32() % 255)
+                            < (self.t_virality as u32) * (tol as u32)
+                        {
                             new_tolerance = new_tolerance.checked_add(1).unwrap_or(255);
                             new_intolerance = new_intolerance.checked_sub(1).unwrap_or(0);
-                          }
-                          if (self.seeded_randomizer.u32() % 255) < (self.i_virality as u32) * (int as u32) {
+                        }
+                        if (self.seeded_randomizer.u32() % 255)
+                            < (self.i_virality as u32) * (int as u32)
+                        {
                             new_intolerance = new_intolerance.checked_add(1).unwrap_or(255);
                             new_tolerance = new_tolerance.checked_sub(1).unwrap_or(0);
-                          }
+                        }
                         Cell {
                             identity: cell.identity,
                             tolerance_x: new_tolerance,
-                            intolerance_x: new_intolerance
+                            intolerance_x: new_intolerance,
                         }
                     }
                 };
@@ -234,32 +259,29 @@ impl Universe {
                     Cell {
                         identity: Identity::X,
                         intolerance_x: 0,
-                        tolerance_x: 0 
+                        tolerance_x: 0,
                     }
-                }
-                else if i % 5 == 0 || i % 11 == 0 {
+                } else if i % 5 == 0 || i % 11 == 0 {
                     Cell {
                         identity: Identity::A,
                         intolerance_x: 0,
-                        tolerance_x: 1 
+                        tolerance_x: 1,
                     }
-                }
-                else if i % 17 == 0 {
+                } else if i % 17 == 0 {
                     Cell {
                         identity: Identity::A,
                         intolerance_x: 1,
-                        tolerance_x: 0 
+                        tolerance_x: 0,
                     }
                 } else {
                     Cell {
                         identity: Identity::A,
                         intolerance_x: 0,
-                        tolerance_x: 0 
+                        tolerance_x: 0,
                     }
                 }
             })
             .collect();
-
 
         let seed = 10;
 
@@ -297,7 +319,6 @@ impl Universe {
         self.cells = new_universe.cells();
     }
 
-
     // /// Set the width of the universe.
     // ///
     // /// Resets all cells to the dead state.
@@ -331,7 +352,6 @@ impl Universe {
 //     }
 
 // }
-
 
 // Copyright 2024 Thomas Constantine Moore
 
