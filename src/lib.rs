@@ -47,8 +47,12 @@ impl Cell {
 #[wasm_bindgen]
 #[derive(Clone, Copy, Debug)]
 pub struct UniverseConfig {
+    /// If enabled, cells will swap with willing cells to flee intolerance
     enable_swapping: bool,
+    /// If enabled, cells will seed with intolerance_of_intolerance, which spreads at the same virality as intolerance_x
     enable_intolerance_of_intolerance: bool,
+    /// If enabled, all tolerant cells will behave like cells with intolerance_of_intolerance
+    enable_uniform_tolerant_intolerance: bool,
 }
 
 #[wasm_bindgen]
@@ -57,14 +61,22 @@ impl UniverseConfig {
         UniverseConfig {
             enable_swapping: false,
             enable_intolerance_of_intolerance: false,
+            enable_uniform_tolerant_intolerance: false,
         }
     }
+    /// enables cells to swap with willing cells to flee intolerance
     pub fn with_swapping(&mut self) -> Self {
         self.enable_swapping = true;
         *self
     }
+    /// enables cells to seed with intolerance_of_intolerance, which spreads at the same virality as intolerance_x
     pub fn with_intolerance_of_intolerance(&mut self) -> Self {
         self.enable_intolerance_of_intolerance = true;
+        *self
+    }
+    /// causes all tolerant cells to behave like cells with intolerance_of_intolerance
+    pub fn with_uniform_(&mut self) -> Self {
+        self.enable_uniform_tolerant_intolerance = true;
         *self
     }
 }
@@ -327,7 +339,7 @@ impl Universe {
             config,
             seeded_randomizer: Random::from_seed(seed1),
             i_virality: 2,
-            t_virality: if config.enable_intolerance_of_intolerance {
+            t_virality: if config.enable_uniform_tolerant_intolerance {
                 2
             } else {
                 1

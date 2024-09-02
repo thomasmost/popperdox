@@ -10,9 +10,7 @@ export async function main() {
   const { Universe, UniverseConfig, Identity } =
     (await (wasmPopperdox as any)) as typeof wasmPopperdox;
   // Construct the universe, and get its width and height.
-  let config = UniverseConfig.new()
-    .with_swapping()
-    .with_intolerance_of_intolerance();
+  let config = UniverseConfig.new().with_swapping();
   const universe = Universe.new(config);
   const width = universe.width();
   const height = universe.height();
