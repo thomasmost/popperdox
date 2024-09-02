@@ -7,13 +7,9 @@ const X_COLOR = "#334455";
 const A_COLOR = "#aabbcc";
 
 export async function main() {
- const {Universe, Identity} = (await (wasmPopperdox as any)) as typeof wasmPopperdox;
+ const {Universe, UniverseConfig, Identity} = (await (wasmPopperdox as any)) as typeof wasmPopperdox;
  // Construct the universe, and get its width and height.
- let config = {
-  free: function(): void { null },
-  enable_swapping: true,
-  enable_intolerance_of_intolerance: true,
- }
+ let config = UniverseConfig.new().with_swapping();
  const universe = Universe.new(config);
  const width = universe.width();
  const height = universe.height();

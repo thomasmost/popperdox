@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       popperdox:
-        specifier: 0.1.2
-        version: 0.1.2
+        specifier: 0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/node':
         specifier: ^22.5.0
@@ -1083,8 +1083,8 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
-  popperdox@0.1.2:
-    resolution: {integrity: sha512-0Io4V7X7P7Vol9Te7thAn1sxCb838XdyZWFSDM0UGCtAgUtZhhioxxdciKDaZVAwn6nIi0knhzxoqdYcnVWumg==}
+  popperdox@0.2.0:
+    resolution: {integrity: sha512-wF3KOW/U1FP/bi9d9AvKk0dJr+azscnNah40CSI973nFINBvHMNFwdfporWbBBLzKXatlKYkaKdljf3BCD0Huw==}
 
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
@@ -2574,7 +2574,7 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  popperdox@0.1.2: {}
+  popperdox@0.2.0: {}
 
   process-nextick-args@2.0.1: {}
 
