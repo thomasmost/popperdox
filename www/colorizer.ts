@@ -65,3 +65,37 @@ export const generateTolerantColor = (tolerance: number) => {
   }
   return "#00ff00";
 };
+
+export const generateParadoxColor = (intolerance_of_intolerance: number) => {
+  if (intolerance_of_intolerance <= 0) {
+    return null;
+  }
+  if (intolerance_of_intolerance <= 1) {
+    return "#aaffff";
+  }
+  if (intolerance_of_intolerance <= 2) {
+    return "#99ffff";
+  }
+  if (intolerance_of_intolerance <= 3) {
+    return "#88ffff";
+  }
+  if (intolerance_of_intolerance <= 4) {
+    return "#77ffff";
+  }
+  if (intolerance_of_intolerance <= 5) {
+    return "#66ffff";
+  }
+  if (intolerance_of_intolerance <= 6) {
+    return "#55ffff";
+  }
+  if (intolerance_of_intolerance <= 7) {
+    return "#44ffff";
+  }
+  if (intolerance_of_intolerance <= 8) {
+    return "#33ffff";
+  }
+  if (intolerance_of_intolerance <= 9) {
+    return "#22ffff";
+  }
+  return "#00ffff";
+};

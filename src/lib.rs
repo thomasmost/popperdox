@@ -33,6 +33,7 @@ pub struct Cell {
     identity: Identity,
     intolerance_x: u8,
     tolerance_x: u8,
+    intolerance_of_intolerance_x: u8,
 }
 
 impl Cell {
@@ -102,7 +103,11 @@ impl fmt::Display for Universe {
                     Identity::A => 'A',
                     Identity::X => 'X',
                 };
-                write!(f, "{},{},{};", ident, cell.intolerance_x, cell.tolerance_x)?;
+                write!(
+                    f,
+                    "{},{},{},{};",
+                    ident, cell.intolerance_x, cell.tolerance_x, cell.intolerance_of_intolerance_x
+                )?;
             }
             write!(f, "\n")?;
         }
@@ -206,6 +211,51 @@ impl Universe {
         count
     }
 
+    pub fn next_generation_of_cell(
+        &self,
+        cell: &Cell,
+        neighboring_tolerance: u8,
+        neighboring_intolerance: u8,
+        neighboring_intolerance_of_intolerance: u8,
+    ) -> Cell {
+        // 1: Any X cell will not be affected by tolerance or intolerance
+        if cell.identity == Identity::X {
+            return cell.clone();
+        }
+        // 2: Adjust A cells by tvirality and ivirality
+        let mut new_tolerance = cell.tolerance_x;
+        let mut new_intolerance = cell.intolerance_x;
+        let mut new_intolerance_of_intolerance = cell.intolerance_of_intolerance_x;
+        if (self.seeded_randomizer.u32() % 255)
+            < (self.t_virality as u32) * (neighboring_tolerance as u32)
+        {
+            new_tolerance = new_tolerance.checked_add(1).unwrap_or(255);
+            new_intolerance = new_intolerance.checked_sub(1).unwrap_or(0);
+        }
+        if (self.seeded_randomizer.u32() % 255)
+            < (self.i_virality as u32) * (neighboring_intolerance as u32)
+            && cell.intolerance_of_intolerance_x <= 0
+        {
+            new_intolerance = new_intolerance.checked_add(1).unwrap_or(255);
+            new_tolerance = new_tolerance.checked_sub(1).unwrap_or(0);
+        }
+        if self.config.enable_intolerance_of_intolerance
+            && cell.intolerance_x <= 0
+            && (self.seeded_randomizer.u32() % 255)
+                < (self.i_virality as u32) * (neighboring_intolerance_of_intolerance as u32)
+        {
+            new_intolerance_of_intolerance =
+                new_intolerance_of_intolerance.checked_add(1).unwrap_or(255);
+            new_intolerance = 0;
+        }
+        Cell {
+            identity: cell.identity,
+            tolerance_x: new_tolerance,
+            intolerance_x: new_intolerance,
+            intolerance_of_intolerance_x: new_intolerance_of_intolerance,
+        }
+    }
+
     pub fn tick(&mut self) {
         let mut next = self.cells.clone();
 
@@ -239,36 +289,12 @@ impl Universe {
                     }
                 }
 
-                let next_cell = match (
-                    &cell.identity,
+                let next_cell = self.next_generation_of_cell(
+                    &cell,
                     neighboring_tolerance,
                     neighboring_intolerance,
-                ) {
-                    // Rule 1: Any X cell will not be affected by tolerance or intolerance
-                    (Identity::X, _tol, _int) => cell.clone(),
-                    // Rule 2: Any A cell gets adjusted by tvirality and ivirality
-                    (Identity::A, tol, int) => {
-                        let mut new_tolerance = cell.tolerance_x;
-                        let mut new_intolerance = cell.intolerance_x;
-                        if (self.seeded_randomizer.u32() % 255)
-                            < (self.t_virality as u32) * (tol as u32)
-                        {
-                            new_tolerance = new_tolerance.checked_add(1).unwrap_or(255);
-                            new_intolerance = new_intolerance.checked_sub(1).unwrap_or(0);
-                        }
-                        if (self.seeded_randomizer.u32() % 255)
-                            < (self.i_virality as u32) * (int as u32)
-                        {
-                            new_intolerance = new_intolerance.checked_add(1).unwrap_or(255);
-                            new_tolerance = new_tolerance.checked_sub(1).unwrap_or(0);
-                        }
-                        Cell {
-                            identity: cell.identity,
-                            tolerance_x: new_tolerance,
-                            intolerance_x: new_intolerance,
-                        }
-                    }
-                };
+                    neighboring_intolerance_of_intolerance,
+                );
 
                 next[idx] = next_cell;
             }
@@ -293,6 +319,9 @@ impl Universe {
         let width = 64;
         let height = 64;
 
+        let spawn_paradox_cells =
+            config.enable_intolerance_of_intolerance && !config.enable_uniform_tolerant_intolerance;
+
         // let rng = Random::new();
         // let new_seed = rng.seed();
         // let random_u32 = rng.u32();
@@ -308,24 +337,35 @@ impl Universe {
                         identity: Identity::X,
                         intolerance_x: 0,
                         tolerance_x: 0,
+                        intolerance_of_intolerance_x: 0,
                     }
                 } else if i % 5 == 0 || i % 11 == 0 {
                     Cell {
                         identity: Identity::A,
                         intolerance_x: 0,
                         tolerance_x: 1,
+                        intolerance_of_intolerance_x: 0,
                     }
                 } else if i % 17 == 0 {
                     Cell {
                         identity: Identity::A,
                         intolerance_x: 1,
                         tolerance_x: 0,
+                        intolerance_of_intolerance_x: 0,
+                    }
+                } else if spawn_paradox_cells && i % 19 == 0 {
+                    Cell {
+                        identity: Identity::A,
+                        intolerance_x: 0,
+                        tolerance_x: 0,
+                        intolerance_of_intolerance_x: 1,
                     }
                 } else {
                     Cell {
                         identity: Identity::A,
                         intolerance_x: 0,
                         tolerance_x: 0,
+                        intolerance_of_intolerance_x: 0,
                     }
                 }
             })
