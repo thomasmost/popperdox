@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       popperdox:
-        specifier: 0.2.0
-        version: 0.2.0
+        specifier: 0.3.0
+        version: 0.3.0
     devDependencies:
       "@types/node":
         specifier: ^22.5.0
@@ -1903,10 +1903,10 @@ packages:
       }
     engines: { node: ">=8" }
 
-  popperdox@0.2.0:
+  popperdox@0.3.0:
     resolution:
       {
-        integrity: sha512-wF3KOW/U1FP/bi9d9AvKk0dJr+azscnNah40CSI973nFINBvHMNFwdfporWbBBLzKXatlKYkaKdljf3BCD0Huw==,
+        integrity: sha512-WSWy1/nxCv0TPVl0Yr4wZmw5csgc19QkAztOLm9+LIGTn33ynhPZ3FNhiQJb7wRTc4zKw5j/+ylvOCRT2sVt3g==,
       }
 
   process-nextick-args@2.0.1:
@@ -3702,7 +3702,7 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  popperdox@0.2.0: {}
+  popperdox@0.3.0: {}
 
   process-nextick-args@2.0.1: {}
 

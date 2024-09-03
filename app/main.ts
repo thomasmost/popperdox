@@ -1,5 +1,9 @@
 import wasmPopperdox from "popperdox";
-import { generateIntolerantColor, generateTolerantColor } from "./colorizer";
+import {
+  generateIntolerantColor,
+  generateTolerantColor,
+  generateParadoxColor,
+} from "./colorizer";
 
 const CELL_SIZE = 5; // px
 const GRID_COLOR = "#CCCCCC";
@@ -92,11 +96,13 @@ export async function main() {
 
     const cellStrings = rendered.split(";");
     const cells = cellStrings.map((cellString) => {
-      const [identity, intolerance_x, tolerance_x] = cellString.split(",");
+      const [identity, intolerance_x, tolerance_x, intolerance_of_intolerance] =
+        cellString.split(",");
       return {
         identity: identity === "X" ? Identity.X : Identity.A,
         intolerance_x: parseInt(intolerance_x),
         tolerance_x: parseInt(tolerance_x),
+        intolerance_of_intolerance: parseInt(intolerance_of_intolerance),
       };
     });
     for (let row = 0; row < height; row++) {
@@ -108,9 +114,11 @@ export async function main() {
             ? X_COLOR
             : cells[idx].intolerance_x > 0
               ? generateIntolerantColor(cells[idx].intolerance_x)
-              : cells[idx].tolerance_x > 0
-                ? generateTolerantColor(cells[idx].tolerance_x)
-                : A_COLOR;
+              : cells[idx].intolerance_of_intolerance > 0
+                ? generateParadoxColor(cells[idx].intolerance_of_intolerance)
+                : cells[idx].tolerance_x > 0
+                  ? generateTolerantColor(cells[idx].tolerance_x)
+                  : A_COLOR;
 
         ctx.fillRect(
           col * (CELL_SIZE + 1) + 1,
