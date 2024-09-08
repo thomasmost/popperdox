@@ -9,6 +9,7 @@
   },
   "packageManager": "pnpm@9.9.0",
   "scripts": {
+    "create-empty-local-module": "mkdir -p ../pkg && touch ../pkg/index.js",
     "build": "webpack --config webpack.config.ts",
     "dev": "webpack-dev-server"
   },
