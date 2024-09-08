@@ -14,8 +14,8 @@
   },
   "scripts": {
     "build": "wasm-pack build",
-    "dev": "pnpm --dir www run dev",
-    "redev": "wasm-pack build && pnpm --dir www install && pnpm --dir www run dev",
+    "dev": "pnpm --dir app run dev",
+    "redev": "wasm-pack build && pnpm --dir app install && pnpm --dir app run dev",
     "prepare": "husky"
   },
   "keywords": [

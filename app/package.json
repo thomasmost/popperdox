@@ -29,7 +29,8 @@
   },
   "homepage": "https://github.com/rustwasm/create-wasm-app#readme",
   "dependencies": {
-    "popperdox": "0.3.0"
+    "popperdoxPublished": "npm:popperdox@0.3.0",
+    "popperdoxLocal": "file:../pkg"
   },
   "devDependencies": {
     "@types/node": "^22.5.0",

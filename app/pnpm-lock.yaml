@@ -7,9 +7,12 @@ settings:
 importers:
   .:
     dependencies:
-      popperdox:
-        specifier: 0.3.0
-        version: 0.3.0
+      popperdoxLocal:
+        specifier: file:../pkg
+        version: popperdox@file:../pkg
+      popperdoxPublished:
+        specifier: npm:popperdox@0.3.0
+        version: popperdox@0.3.0
     devDependencies:
       "@types/node":
         specifier: ^22.5.0
@@ -1909,6 +1912,9 @@ packages:
         integrity: sha512-WSWy1/nxCv0TPVl0Yr4wZmw5csgc19QkAztOLm9+LIGTn33ynhPZ3FNhiQJb7wRTc4zKw5j/+ylvOCRT2sVt3g==,
       }
 
+  popperdox@file:../pkg:
+    resolution: { directory: ../pkg, type: directory }
+
   process-nextick-args@2.0.1:
     resolution:
       {
@@ -3703,6 +3709,8 @@ snapshots:
       find-up: 4.1.0
 
   popperdox@0.3.0: {}
+
+  popperdox@file:../pkg: {}
 
   process-nextick-args@2.0.1: {}
 

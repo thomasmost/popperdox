@@ -1,4 +1,8 @@
-import wasmPopperdox from "popperdox";
+import publishedPackage from "popperdoxPublished";
+import localPackage from "popperdoxLocal";
+const wasmPopperdox =
+  process.env.NODE_ENV == "prod" ? publishedPackage : localPackage;
+
 import {
   generateIntolerantColor,
   generateTolerantColor,
