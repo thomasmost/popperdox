@@ -14,7 +14,7 @@ macro_rules! log {
     }
 }
 
-enum IntoleranceOf {
+pub enum IntoleranceOf {
     X,
     IntoleranceX,
 }
