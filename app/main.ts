@@ -1,7 +1,4 @@
 import publishedPackage from "popperdoxPublished";
-import localPackage from "popperdoxLocal";
-const wasmPopperdox =
-  process.env.NODE_ENV == "prod" ? publishedPackage : localPackage;
 
 import {
   generateIntolerantColor,
@@ -14,7 +11,7 @@ const GRID_COLOR = "#CCCCCC";
 const X_COLOR = "#334455";
 const A_COLOR = "#aabbcc";
 
-export async function main() {
+export async function main(wasmPopperdox: typeof publishedPackage) {
   const { Universe, UniverseConfig, Identity } =
     (await (wasmPopperdox as any)) as typeof wasmPopperdox;
   // Construct the universe, and get its width and height.
