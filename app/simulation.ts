@@ -1,5 +1,3 @@
-import publishedPackage from "popperdoxPublished";
-
 import { Universe, UniverseConfig, Identity } from "popperdoxPublished";
 
 import {
