@@ -15,7 +15,7 @@ importers:
         version: popperdox@0.3.2
     devDependencies:
       "@types/node":
-        specifier: ^22.5.4
+        specifier: ^22.5.0
         version: 22.5.4
       "@types/webpack":
         specifier: ^5.28.5
@@ -39,7 +39,7 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(webpack-dev-server@5.1.0)(webpack@5.94.0)
       webpack-dev-server:
-        specifier: ^5.1.0
+        specifier: ^5.0.4
         version: 5.1.0(webpack-cli@5.1.4)(webpack@5.94.0)
 
 packages:
