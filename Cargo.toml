@@ -1,6 +1,6 @@
 [package]
 name = "popperdox"
-version = "0.3.0"
+version = "0.3.1"
 description = "A WASM implementation of the Popperdox simulation"
 repository = "https://github.com/thomasmost/popperdox"
 license = "Apache-2.0"

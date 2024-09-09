@@ -40,7 +40,7 @@ impl Cell {
     pub fn get_intolerance(&self, intolerance: &IntoleranceOf) -> u8 {
         match intolerance {
             IntoleranceOf::X => self.intolerance_x,
-            IntoleranceOf::IntoleranceX => self.tolerance_x,
+            IntoleranceOf::IntoleranceX => self.intolerance_of_intolerance_x,
         }
     }
 }
@@ -211,7 +211,6 @@ impl Universe {
         count
     }
 
-    // BUG #2 need to debug this function a bit
     pub fn next_generation_of_cell(
         &self,
         cell: &Cell,
@@ -256,8 +255,6 @@ impl Universe {
                 < (self.i_virality * neighboring_intolerance_of_intolerance)
         {
             new_tolerance = new_tolerance.checked_sub(1).unwrap_or(0);
-            new_intolerance_of_intolerance =
-                new_intolerance_of_intolerance.checked_sub(1).unwrap_or(0);
             if new_tolerance == 0 && new_intolerance_of_intolerance == 0 {
                 new_intolerance_of_intolerance =
                     new_intolerance_of_intolerance.checked_add(1).unwrap_or(255);
@@ -372,14 +369,13 @@ impl Universe {
                         tolerance_x: 0,
                         intolerance_of_intolerance_x: 0,
                     }
-                // BUG #1 why if this is commented out do we still get paradox cells?
-                // } else if spawn_paradox_cells && i % 19 == 0 {
-                //     Cell {
-                //         identity: Identity::A,
-                //         intolerance_x: 0,
-                //         tolerance_x: 0,
-                //         intolerance_of_intolerance_x: 1,
-                //     }
+                } else if spawn_paradox_cells && i % 19 == 0 {
+                    Cell {
+                        identity: Identity::A,
+                        intolerance_x: 0,
+                        tolerance_x: 0,
+                        intolerance_of_intolerance_x: 1,
+                    }
                 } else {
                     Cell {
                         identity: Identity::A,
