@@ -5,11 +5,12 @@
     <title>Popperdox</title>
     <style>
       body {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .simulation {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -102,15 +103,39 @@
       <h1>Popperdox</h1>
       <p>Welcome to our society.</p>
     </div>
-    <div className="controls">
-      <button id="play-pause"></button>
-      <button id="ffwd-btn">⏭</button>
-      <button id="step-fwd-btn">Step Forward</button>
-      <button id="reset-btn">Reset</button>
+    <div id="simulation-one" class="simulation">
+      <div class="controls">
+        <button class="play-pause"></button>
+        <button class="ffwd-btn">⏭</button>
+        <button class="step-fwd-btn">Step Forward</button>
+        <button class="reset-btn">Reset</button>
+      </div>
+      <hr />
+      <canvas class="popperdox-canvas"></canvas>
+      <div class="animation-id"></div>
     </div>
-    <hr />
-    <canvas id="popperdox-canvas"></canvas>
-    <div id="animation-id"></div>
+    <div id="simulation-two" class="simulation">
+      <div class="controls">
+        <button class="play-pause"></button>
+        <button class="ffwd-btn">⏭</button>
+        <button class="step-fwd-btn">Step Forward</button>
+        <button class="reset-btn">Reset</button>
+      </div>
+      <hr />
+      <canvas class="popperdox-canvas"></canvas>
+      <div class="animation-id"></div>
+    </div>
+    <div id="simulation-three" class="simulation">
+      <div class="controls">
+        <button class="play-pause"></button>
+        <button class="ffwd-btn">⏭</button>
+        <button class="step-fwd-btn">Step Forward</button>
+        <button class="reset-btn">Reset</button>
+      </div>
+      <hr />
+      <canvas class="popperdox-canvas"></canvas>
+      <div class="animation-id"></div>
+    </div>
     <script src="./bootstrap.js"></script>
   </body>
 </html>
