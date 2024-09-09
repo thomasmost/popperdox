@@ -4,7 +4,7 @@ version = "0.3.2"
 description = "A WASM implementation of the Popperdox simulation"
 repository = "https://github.com/thomasmost/popperdox"
 license = "Apache-2.0"
-authors = ["Thomas Constantine Moore <tomismore@gmail.com>"]
+authors = ["Thomas Constantine Moore <thomasmost@hey.com>"]
 edition = "2018"
 
 [lib]
