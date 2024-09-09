@@ -211,6 +211,7 @@ impl Universe {
         count
     }
 
+    // BUG #2 need to debug this function a bit
     pub fn next_generation_of_cell(
         &self,
         cell: &Cell,
@@ -226,27 +227,45 @@ impl Universe {
         let mut new_tolerance = cell.tolerance_x;
         let mut new_intolerance = cell.intolerance_x;
         let mut new_intolerance_of_intolerance = cell.intolerance_of_intolerance_x;
-        if (self.seeded_randomizer.u32() % 255)
-            < (self.t_virality as u32) * (neighboring_tolerance as u32)
+        if ((self.seeded_randomizer.u32() % 160) as u8) < self.t_virality * neighboring_tolerance
+        // max 2 * 8 * 10 = 160, so this should be safe
         {
-            new_tolerance = new_tolerance.checked_add(1).unwrap_or(255);
             new_intolerance = new_intolerance.checked_sub(1).unwrap_or(0);
+            if new_intolerance == 0 {
+                new_tolerance = new_tolerance.checked_add(1).unwrap_or(10);
+            }
+            if new_tolerance > 10 {
+                new_tolerance = 10;
+            }
         }
-        if (self.seeded_randomizer.u32() % 255)
-            < (self.i_virality as u32) * (neighboring_intolerance as u32)
+        if ((self.seeded_randomizer.u32() % 160) as u8)
+            < (self.i_virality * neighboring_intolerance)
             && cell.intolerance_of_intolerance_x <= 0
         {
-            new_intolerance = new_intolerance.checked_add(1).unwrap_or(255);
             new_tolerance = new_tolerance.checked_sub(1).unwrap_or(0);
+            if new_tolerance == 0 && new_intolerance_of_intolerance == 0 {
+                new_intolerance = new_intolerance.checked_add(1).unwrap_or(255);
+            }
+            if new_intolerance > 10 {
+                new_intolerance = 10;
+            }
         }
         if self.config.enable_intolerance_of_intolerance
             && cell.intolerance_x <= 0
-            && (self.seeded_randomizer.u32() % 255)
-                < (self.i_virality as u32) * (neighboring_intolerance_of_intolerance as u32)
+            && ((self.seeded_randomizer.u32() % 160) as u8)
+                < (self.i_virality * neighboring_intolerance_of_intolerance)
         {
+            new_tolerance = new_tolerance.checked_sub(1).unwrap_or(0);
             new_intolerance_of_intolerance =
-                new_intolerance_of_intolerance.checked_add(1).unwrap_or(255);
-            new_intolerance = 0;
+                new_intolerance_of_intolerance.checked_sub(1).unwrap_or(0);
+            if new_tolerance == 0 && new_intolerance_of_intolerance == 0 {
+                new_intolerance_of_intolerance =
+                    new_intolerance_of_intolerance.checked_add(1).unwrap_or(255);
+            }
+
+            if new_intolerance_of_intolerance > 10 {
+                new_intolerance_of_intolerance = 10;
+            }
         }
         Cell {
             identity: cell.identity,
@@ -353,13 +372,14 @@ impl Universe {
                         tolerance_x: 0,
                         intolerance_of_intolerance_x: 0,
                     }
-                } else if spawn_paradox_cells && i % 19 == 0 {
-                    Cell {
-                        identity: Identity::A,
-                        intolerance_x: 0,
-                        tolerance_x: 0,
-                        intolerance_of_intolerance_x: 1,
-                    }
+                // BUG #1 why if this is commented out do we still get paradox cells?
+                // } else if spawn_paradox_cells && i % 19 == 0 {
+                //     Cell {
+                //         identity: Identity::A,
+                //         intolerance_x: 0,
+                //         tolerance_x: 0,
+                //         intolerance_of_intolerance_x: 1,
+                //     }
                 } else {
                     Cell {
                         identity: Identity::A,
