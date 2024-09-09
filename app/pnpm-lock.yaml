@@ -11,8 +11,8 @@ importers:
         specifier: file:../pkg
         version: popperdox@file:../pkg
       popperdoxPublished:
-        specifier: npm:popperdox@0.3.0
-        version: popperdox@0.3.0
+        specifier: npm:popperdox@0.3.1
+        version: popperdox@0.3.1
     devDependencies:
       "@types/node":
         specifier: ^22.5.0
@@ -1906,11 +1906,13 @@ packages:
       }
     engines: { node: ">=8" }
 
-  popperdox@0.3.0:
+  popperdox@0.3.1:
     resolution:
       {
-        integrity: sha512-WSWy1/nxCv0TPVl0Yr4wZmw5csgc19QkAztOLm9+LIGTn33ynhPZ3FNhiQJb7wRTc4zKw5j/+ylvOCRT2sVt3g==,
+        integrity: sha512-oWgJGH6veoYw264u79qpxUFrPEgHToEPgeSC94CaPDtQVGRzz0c/Pp+btSUOedMfCVrGfV7/+EJPB8YR3m5PVg==,
       }
+    engines: { node: ">=8.0.0", pnpm: 9.9.0 }
+    hasBin: true
 
   popperdox@file:../pkg:
     resolution: { directory: ../pkg, type: directory }
@@ -3708,7 +3710,7 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  popperdox@0.3.0: {}
+  popperdox@0.3.1: {}
 
   popperdox@file:../pkg: {}
 
