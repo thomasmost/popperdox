@@ -15,11 +15,15 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin: 0 0 33vh 0;
+        margin: 10vh 0 10vh 0;
       }
       .controls {
         display: flex;
         align-items: center;
+      }
+      .copy-block {
+        max-width: 800px;
+        margin: auto;
       }
     </style>
     <link
@@ -120,10 +124,15 @@
         even a fewer starting set of iCells eventually results in the
         destruction of the 'tolerant' society.
       </p>
+      <p>
+        To make up for the assumption that intolerance is twice as
+        'transmissible' as tolerance, we'll seed the society with fewer than a
+        quarter as many iCells as tCells.
+      </p>
     </div>
     <div id="simulation-one" class="simulation">
       <div class="controls">
-        <button class="play-pause"></button>
+        <button class="play-pause">▶</button>
         <button class="ffwd-btn">⏭</button>
         <button class="step-fwd-btn">Step Forward</button>
         <button class="reset-btn">Reset</button>
@@ -140,10 +149,14 @@
         from positions where they are facing intolerance, to positions of less
         intolerance.
       </p>
+      <p>
+        This relatively simple mechanic results in the striking visual effect of
+        cells "fleeing" intolerance.
+      </p>
     </div>
     <div id="simulation-two" class="simulation">
       <div class="controls">
-        <button class="play-pause"></button>
+        <button class="play-pause">▶</button>
         <button class="ffwd-btn">⏭</button>
         <button class="step-fwd-btn">Step Forward</button>
         <button class="reset-btn">Reset</button>
@@ -159,12 +172,13 @@
         intolerance (light blue, iiCells). They spread their belief with the
         same virality as intolerance of xCells. Based on the same logic that
         xCells cannot become intolerant of themselves, iCells cannot be
-        converted to iiCells and vice versa.
+        converted to iiCells, and vice versa.
       </p>
+      <p>We'll begin with just slightly fewer iiCells than iCells.</p>
     </div>
     <div id="simulation-three" class="simulation">
       <div class="controls">
-        <button class="play-pause"></button>
+        <button class="play-pause">▶</button>
         <button class="ffwd-btn">⏭</button>
         <button class="step-fwd-btn">Step Forward</button>
         <button class="reset-btn">Reset</button>
