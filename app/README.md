@@ -4,6 +4,5 @@ This is the deployed web application, which references the currently published v
 
 ## Commands
 
-- `pnpm redev` - Recompile the WASM package and start the webpack dev server
-- `wasm-pack build` - Build the WASM package
-- `wasm-pack publish` - Publish the WASM package to npm
+- `pnpm dev` - Start the webpack dev server and bundle the app using the local WASM package
+- `pnpm build` - Build a production bundle of the app using the published WASM package

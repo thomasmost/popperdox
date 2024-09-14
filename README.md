@@ -6,23 +6,12 @@ A project inspired by and adapted from the Rust WASM Tutorial: Implementing <a t
 
 Notes on usage
 
-### Build with `wasm-pack build`
+## Commands
 
-```
-wasm-pack build
-```
-
-### Test in Headless Browsers with `wasm-pack test`
-
-```
-wasm-pack test --headless --firefox
-```
-
-### Publish to NPM with `wasm-pack publish`
-
-```
-wasm-pack publish
-```
+- `pnpm redev` - Recompile the WASM package and start the webpack dev server
+- `wasm-pack build` - Build the WASM package
+- `wasm-pack publish` - Publish the WASM package to npm
+- `wasm-pack test --headless --firefox` - Test in a headless browser
 
 ## TODOs
 
