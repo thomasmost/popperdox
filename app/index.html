@@ -15,6 +15,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin: 0 0 33vh 0;
       }
       .controls {
         display: flex;
@@ -103,7 +104,7 @@
       <h1>Popperdox</h1>
       <p>Welcome to our society.</p>
     </div>
-    <div>
+    <div class="copy-block">
       <h2>Simulation 1</h2>
       <p>
         Let's first imagine a society of many cells. These cells might be
@@ -111,8 +112,8 @@
       </p>
       <p>
         In the first iteration, there are four types of cells: Neutral cells
-        (light gray), X-cells (dark blue), Intolerant Cells (red, iCells), and
-        Tolerant Cells (green, tCells)
+        (light gray), minority group cells (dark blue xCells), Intolerant Cells
+        (red iCells), and Tolerant Cells (green tCells)
       </p>
       <p>
         If we agree that intolerance has a higher virality than tolerance, then
@@ -131,6 +132,15 @@
       <canvas class="popperdox-canvas"></canvas>
       <div class="animation-id"></div>
     </div>
+    <div class="copy-block">
+      <h2>Simulation 2</h2>
+      <p>
+        I wanted a better way of modeling intolerance upon target cells, so
+        let's modify our society by having cells "swap" with willing cells away
+        from positions where they are facing intolerance, to positions of less
+        intolerance.
+      </p>
+    </div>
     <div id="simulation-two" class="simulation">
       <div class="controls">
         <button class="play-pause"></button>
@@ -141,6 +151,16 @@
       <hr />
       <canvas class="popperdox-canvas"></canvas>
       <div class="animation-id"></div>
+    </div>
+    <div class="copy-block">
+      <h2>Simulation 3</h2>
+      <p>
+        Now let's introduce a 5th type of cell, cells that are intolerant of
+        intolerance (light blue, iiCells). They spread their belief with the
+        same virality as intolerance of xCells. Based on the same logic that
+        xCells cannot become intolerant of themselves, iCells cannot be
+        converted to iiCells and vice versa.
+      </p>
     </div>
     <div id="simulation-three" class="simulation">
       <div class="controls">

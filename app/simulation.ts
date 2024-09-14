@@ -5,6 +5,7 @@ import {
   generateTolerantColor,
   generateParadoxColor,
 } from "./colorizer";
+import { setViewLogic } from "./view";
 
 const CELL_SIZE = 5; // px
 const GRID_COLOR = "#CCCCCC";
@@ -22,6 +23,7 @@ export async function simulate(
   variant: SimulationVariant,
   iConfig: typeof UniverseConfig,
   iUniverse: typeof Universe,
+  elementId: string,
 ) {
   // Construct the universe, and get its width and height.
 
@@ -43,6 +45,7 @@ export async function simulate(
 
   // for playing/pausing
   let animationId: number | null = null;
+  let generationId: number = 0;
   let timeoutId: NodeJS.Timeout | null = null;
   const isPaused = () => {
     return animationId === null;
@@ -59,6 +62,12 @@ export async function simulate(
     stepForwardButton.setAttribute("disabled", "true");
     renderLoop(throttled);
   };
+
+  setViewLogic(elementId, () => {
+    if (isPaused()) {
+      play(true);
+    }
+  });
 
   const pause = () => {
     playPauseButton.textContent = "▶";
@@ -185,16 +194,18 @@ export async function simulate(
     if (throttled) {
       timeoutId = setTimeout(() => {
         animationId = requestAnimationFrame(() => renderLoop(throttled));
-        animationIdDiv.innerText = "Generation: " + animationId.toString();
+        generationId++;
+        animationIdDiv.innerText = "Generation: " + generationId.toString();
       }, 200);
     } else {
       animationId = requestAnimationFrame(() => renderLoop(throttled));
-      animationIdDiv.innerText = "Generation: " + animationId.toString();
+      generationId++;
+      animationIdDiv.innerText = "Generation: " + generationId.toString();
     }
   };
 
   drawGrid();
   drawCells();
 
-  play(true);
+  // play(true);
 }
