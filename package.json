@@ -16,7 +16,8 @@
     "build": "wasm-pack build",
     "dev": "pnpm --dir app run dev",
     "redev": "wasm-pack build && pnpm --dir app install && pnpm --dir app run dev",
-    "prepare": "husky"
+    "prepare": "husky",
+    "pre-commit": "lint-staged"
   },
   "keywords": [
     "webassembly",
