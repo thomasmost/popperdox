@@ -102,6 +102,7 @@ export async function simulate(
   });
   resetButton.addEventListener("click", (event) => {
     universe.reset();
+    generationId = 0;
     if (isPaused()) {
       play(false);
       pause();
