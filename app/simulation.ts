@@ -55,7 +55,7 @@ export async function simulate(
   const resetButton = container.getElementsByClassName("reset-btn")[0];
   const stepForwardButton = container.getElementsByClassName("step-fwd-btn")[0];
   const animationIdDiv = container.getElementsByClassName(
-    "animation-id",
+    "generation-id",
   )[0] as HTMLDivElement;
   const play = (throttled: boolean) => {
     playPauseButton.textContent = "⏸";
@@ -127,15 +127,41 @@ export async function simulate(
 
     ctx.beginPath();
 
+    let xCellCount = 0;
+    let tCellCount = 0;
+    let iCellCount = 0;
+    let iiCellCount = 0;
+
     const cellStrings = rendered.split(";");
     const cells = cellStrings.map((cellString) => {
-      const [identity, intolerance_x, tolerance_x, intolerance_of_intolerance] =
-        cellString.split(",");
+      const [
+        identity,
+        str_intolerance_x,
+        str_tolerance_x,
+        str_intolerance_of_intolerance,
+      ] = cellString.split(",");
+
+      const intolerance_x = parseInt(str_intolerance_x);
+      const tolerance_x = parseInt(str_tolerance_x);
+      const intolerance_of_intolerance = parseInt(
+        str_intolerance_of_intolerance,
+      );
+
+      if (identity === "X") {
+        xCellCount++;
+      } else if (intolerance_x > 0) {
+        iCellCount++;
+      } else if (tolerance_x > 0 && tolerance_x > intolerance_of_intolerance) {
+        tCellCount++;
+      } else if (intolerance_of_intolerance > 0) {
+        iiCellCount++;
+      }
+
       return {
         identity: identity === "X" ? "X" : "A",
-        intolerance_x: parseInt(intolerance_x),
-        tolerance_x: parseInt(tolerance_x),
-        intolerance_of_intolerance: parseInt(intolerance_of_intolerance),
+        intolerance_x,
+        tolerance_x,
+        intolerance_of_intolerance,
       };
     });
     for (let row = 0; row < height; row++) {
@@ -163,6 +189,14 @@ export async function simulate(
     }
 
     ctx.stroke();
+
+    const stats = {
+      xCellCount,
+      tCellCount,
+      iCellCount,
+      iiCellCount,
+    };
+    return stats;
   };
 
   const drawGrid = () => {
@@ -184,12 +218,28 @@ export async function simulate(
     ctx.stroke();
   };
 
+  const renderStats = (stats: ReturnType<typeof drawCells>) => {
+    const cellStatsDiv = container.getElementsByClassName(
+      "cell-stats",
+    )[0] as HTMLDivElement;
+
+    cellStatsDiv.innerHTML = `
+    <div class="expanded">
+      <div>xCells: ${stats.xCellCount}</div>
+      <div>tCells: ${stats.tCellCount}</div>
+      <div>iCells: ${stats.iCellCount}</div>
+      <div>iiCells: ${stats.iiCellCount}</div>
+    </div>
+    `;
+  };
+
   const renderLoop = (throttled: boolean) => {
     //  debugger;
     universe.tick();
 
     drawGrid();
-    drawCells();
+    const stats = drawCells();
+    renderStats(stats);
 
     if (throttled) {
       timeoutId = setTimeout(() => {
@@ -205,7 +255,8 @@ export async function simulate(
   };
 
   drawGrid();
-  drawCells();
+  const stats = drawCells();
+  renderStats(stats);
 
   // play(true);
 }

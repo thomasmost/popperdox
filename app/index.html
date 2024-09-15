@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <title>Popperdox</title>
     <style>
+      h1 {
+        text-align: center;
+      }
       body {
         display: flex;
         flex-direction: column;
@@ -15,7 +18,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin: 10vh 0 10vh 0;
+        margin: 6vh 0 6vh 0;
       }
       .controls {
         display: flex;
@@ -24,6 +27,16 @@
       .copy-block {
         max-width: 800px;
         margin: auto;
+      }
+      .expanded {
+        position: absolute;
+      }
+      .generation-id {
+        cursor: pointer;
+        display: block;
+      }
+      .generation-id:hover {
+        text-decoration: underline;
       }
     </style>
     <link
@@ -106,7 +119,7 @@
   <body>
     <div>
       <h1>Popperdox</h1>
-      <p>Welcome to our society.</p>
+      <p>"So much for the tolerant left."</p>
     </div>
     <div class="copy-block">
       <h2>Simulation 1</h2>
@@ -117,17 +130,15 @@
       <p>
         In the first iteration, there are four types of cells: Neutral cells
         (light gray), minority group cells (dark blue xCells), Intolerant Cells
-        (red iCells), and Tolerant Cells (green tCells)
+        (red iCells), and Tolerant Cells (green tCells). Both tCells and iCells
+        "spread" to adjacent cells, but xCells cannot become intolerant of
+        themselves.
       </p>
       <p>
         If we agree that intolerance has a higher virality than tolerance, then
-        even a fewer starting set of iCells eventually results in the
-        destruction of the 'tolerant' society.
-      </p>
-      <p>
-        To make up for the assumption that intolerance is twice as
-        'transmissible' as tolerance, we'll seed the society with fewer than a
-        quarter as many iCells as tCells.
+        even a relatively small starting set of iCells eventually results in the
+        destruction of the 'tolerant' society. In the below simulation, the
+        society is seeded with fewer than a quarter as many iCells as tCells.
       </p>
     </div>
     <div id="simulation-one" class="simulation">
@@ -139,7 +150,11 @@
       </div>
       <hr />
       <canvas class="popperdox-canvas"></canvas>
-      <div class="animation-id"></div>
+
+      <details class="simulation-stats">
+        <summary class="generation-id"></summary>
+        <div class="cell-stats"></div>
+      </details>
     </div>
     <div class="copy-block">
       <h2>Simulation 2</h2>
@@ -163,7 +178,11 @@
       </div>
       <hr />
       <canvas class="popperdox-canvas"></canvas>
-      <div class="animation-id"></div>
+
+      <details class="simulation-stats">
+        <summary class="generation-id"></summary>
+        <div class="cell-stats"></div>
+      </details>
     </div>
     <div class="copy-block">
       <h2>Simulation 3</h2>
@@ -185,7 +204,11 @@
       </div>
       <hr />
       <canvas class="popperdox-canvas"></canvas>
-      <div class="animation-id"></div>
+
+      <details class="simulation-stats">
+        <summary class="generation-id"></summary>
+        <div class="cell-stats"></div>
+      </details>
     </div>
     <script src="./bootstrap.js"></script>
   </body>
