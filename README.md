@@ -18,6 +18,6 @@ Notes on usage
 - [x] Copy explaining interation upon each Simulation
 - [ ] Allow configuring number of starting X-cells, I-cells, and P-cells.
 - [x] Output current number of majority I, T, and P cells as stats
-- [ ] Should X Cells spread tolerance to adjacent cells?
+- [x] Should X Cells spread tolerance to adjacent cells?
 - [ ] (Maybe) Allow configuring size of board?
 - [ ] (Maybe) Choose a random seed, and allow sharing a seed via query param?
