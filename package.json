@@ -17,7 +17,7 @@
     "dev": "pnpm --dir app run dev",
     "redev": "wasm-pack build && pnpm --dir app install && pnpm --dir app run dev",
     "prepare": "husky",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged && pnpm --dir app install && git add app/pnpm-lock.yaml"
   },
   "keywords": [
     "webassembly",
