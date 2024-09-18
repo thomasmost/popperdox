@@ -1,6 +1,5 @@
 import publishedPackage from "popperdoxPublished";
 import { SimulationVariant, simulate } from "./simulation";
-import { setViewLogic } from "./view";
 
 export async function main(wasmPopperdox: typeof publishedPackage) {
   const { Universe, UniverseConfig, Identity } =

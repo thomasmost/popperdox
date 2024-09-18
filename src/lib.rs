@@ -205,7 +205,12 @@ impl Universe {
                 let neighbor_row = (row + delta_row) % self.height;
                 let neighbor_col = (column + delta_col) % self.width;
                 let idx = self.get_index(neighbor_row, neighbor_col);
-                count += self.cells[idx].tolerance_x;
+                if self.cells[idx].identity == Identity::X {
+                    // X Cells always spread low-level tolerance of themselves
+                    count += 1;
+                } else {
+                    count += self.cells[idx].tolerance_x;
+                }
             }
         }
         count
