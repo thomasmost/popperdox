@@ -115,6 +115,14 @@
       content="/assets/icon/ms-icon-144x144.png"
     />
     <meta name="theme-color" content="#ffffff" />
+    <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
+    <script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.6.22-min.js.gz"></script>
+    <script>
+      window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+      window.amplitude.init("32092d91dcb2937502d5e03fb944bd1a", {
+        autocapture: { elementInteractions: true },
+      });
+    </script>
   </head>
   <body>
     <div>
