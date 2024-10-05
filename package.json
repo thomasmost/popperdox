@@ -5,10 +5,10 @@
   "main": "index.js",
   "engines": {
     "node": ">=8.0.0",
-    "pnpm": "9.9.0"
+    "pnpm": "9.12.0"
   },
   "packageManager": "pnpm@9.9.0",
-  "author": "Thomas Moore <thomasmost@hey.com>",
+  "author": "Thomas Moore <tcmoore@protonmail.com>",
   "bin": {
     "popperdox": ".bin/popperdox.js"
   },
